@@ -1,0 +1,15 @@
+import * as fs from "fs";
+import { Router } from "express";
+const router = Router();
+
+//===================GET===================//
+
+router.get('/', (req,res) => {
+        res.render('home'); 
+})
+
+router.get('/contacto', (req,res) => {
+    res.render('contacto'); 
+})
+
+export default router;

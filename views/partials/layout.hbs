@@ -1,0 +1,31 @@
+    {{> head}}
+    {{> header}}
+    {{> @partial-block}}
+        <div class="menu-derecho-fijo">
+            <div class="boton-menu-derecha" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                aria-controls="offcanvasRight"><img src="../../images/user2.png"
+                    height="80" width="80"> <p class="p-menu-derecha">User</p></div>
+            <div class="offcanvas offcanvas-end" tabindex="-1"
+                id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasRightLabel">User
+                        Info</h5>
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <img class="img-user-log" src="../../images/user.png">
+                    <div class="datos-log">
+                        <p class="p-user-log">Email</p>
+                        <p class="p-user-log">Dirección</p>
+                        <p class="p-user-log">Receta</p>
+                        <p class="p-user-log">Hora Médica</p>
+                        <button id="boton-cerrar-sesion" type="button"
+                            class="btn
+                            btn-danger">Salir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{>footer}}
