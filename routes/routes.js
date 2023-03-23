@@ -30,12 +30,12 @@ router.post('/app', async (req,res) => {
     console.log(user);
     console.log(pass);
 
-    //arrLogin.users.forEach(element => {
-    //    console.log(element);
-    //});
+    arrUsuarios.forEach(element => {
+        if (user == element.nombre && pass == element.contraseña){
+            console.log(element.nombre);
+            console.log(element.contraseña);
+        }
+    });
     
     res.render('app')}); 
-
-
-
 export default router;
