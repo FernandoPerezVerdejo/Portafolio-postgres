@@ -1,0 +1,16 @@
+{
+    "pacientes": [
+        {
+            "nombre": "admin",
+            "rut": "123434131-K"
+        },
+        {
+            "nombre": "persona1",
+            "rut":"123215-1"
+        },
+        {
+            "nombre": "persona3",
+            "rut":"2321321-6"
+        }
+    ]
+}

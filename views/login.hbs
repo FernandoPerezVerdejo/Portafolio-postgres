@@ -1,25 +1,23 @@
 
 {{#> layout}}
-
+<body class="cuerpo-pagina-login">
 <main class="proyector-login">
-    <div>
-        <form class="formulariologin">
+        <form class="formulariologin" action="app" method="post">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput1"
+                <input type="text" class="form-control" name="user" id="floatingInput1"
                     placeholder="name">
-                <label for="floatingInput">Correo</label>
+                <label for="floatingInput">Usuario</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control"
+                <input type="password" class="form-control" name="pass"
                     id="floatingPassword1" placeholder="Password">
                 <label for="floatingPassword">Contraseña</label>
             </div>
             <ul class="botonlogin">
-                <button class="btn btn-primary" type="send" onclick="login()">Iniciar
+                <button class="btn btn-primary" type="submit" onclick="login()">Iniciar
                     Sesión</button>
             </ul>
         </form>
-    </div>
-
 </main>
+</body>
 {{/layout}}

@@ -15,8 +15,10 @@ function login(){
         alert('Login exitoso');
         location.reload();
         login1();
+        breakif (user == el.usuario);
     }else{
         alert('Usuario o contraseña incorrectos')
+        breakif(user !== el.usuario)
     }
 });
 }
