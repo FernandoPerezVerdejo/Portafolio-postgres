@@ -1,7 +1,8 @@
 import * as fs from "fs";
 import { Router } from "express";
-import { escribirArchivo, leerArchivo } from "../utils/handlers.js";
+import { escribirArchivo, leerArchivo ,alertaSI } from "../utils/handlers.js";
 import { send } from "process";
+import { time } from "console";
 const router = Router();
 
 //===================GET===================//
@@ -40,10 +41,11 @@ router.post('/app', async (req, res) => {
     });
     if (llave == true) {
         //res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,DELETE')
-        res.render("login")}
+        res.render("home",alertaSI)
+    }
     else {
         //res.send('<scrip>alert("usuario o contraseña incorrecta")</script>');
-        res.render("home")
+        res.render("login")
     }
 
 });

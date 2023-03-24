@@ -15,3 +15,7 @@ export async function escribirArchivo(url,data) {
         if (err) throw console.log('No se pudo guardar el JSON');
     });
 }
+
+export function alertaSI() {
+    return "alert('Login Exitoso')"
+}
