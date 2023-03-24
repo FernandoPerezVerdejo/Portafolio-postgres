@@ -28,3 +28,9 @@
 //         // alert('Login Exitoso')
 //     }
 // }
+// function login(){
+//     if (window.location.reload){
+//         alert('login exitoso')
+//     }
+// }
+console.log(llave);
