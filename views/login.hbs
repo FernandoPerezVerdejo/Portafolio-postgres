@@ -1,27 +1,36 @@
 
 {{#> layout}}
 <body class="cuerpo-pagina-login">
-<main class="proyector-login">
-        <form class="formulariologin" action="app" method="post">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" name="user" id="floatingInput1"
+    <main class="proyector-login">
+        <form class="formulariologin " action="/app" method="post">
+            <div class="form-floating mb-3 has-validation">
+                <input type="text" class="form-control is-invalid" name="username"
+                    id="floatingInput1 username"
                     placeholder="name">
                 <label for="floatingInput">Usuario</label>
+                <div class="invalid-feedback">
+                    Por favor ingresar Usuario.
+                </div>
             </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" name="pass"
-                    id="floatingPassword1" placeholder="Password">
+            <div class="form-floating has-validation">
+                <input type="password" class="form-control is-invalid"
+                    name="password"
+                    id="floatingPassword1 password" placeholder="Password">
                 <label for="floatingPassword">Contraseña</label>
+                <div class="invalid-feedback">
+                    Por favor ingresar Contraseña.
+                </div>
             </div>
             <ul class="botonlogin">
                 <button type="submit" class="btn btn-primary">Iniciar
                     Sesión</button>
             </ul>
         </form>
-    <script>
-        
-        {{saludo}};
-    </script>
-</main>
+        <div>
+            {{#if mensaje}}
+            {{mensaje}}
+            {{/if}};
+        </div>
+    </main>
 </body>
 {{/layout}}

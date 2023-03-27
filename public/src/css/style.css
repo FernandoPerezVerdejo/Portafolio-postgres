@@ -215,14 +215,15 @@
 
     .cuerpo-pagina-login {
         background: linear-gradient(45deg, rgba(234, 234, 255, 0) 50%, rgb(95, 95, 238) 80%);
-        height: 750px;
+        height: 95%;
+        width: 100%;
     }
 
 
 
     .formulariologin {
         width: 350px;
-        height: 250px;
+        height: 300px;
         margin-left: auto;
         margin-right: auto;
         margin-top: 5%;
@@ -237,13 +238,64 @@
     .botonlogin {
         width: 285px;
         padding-right: 30px;
-        padding-top: 10px;
+        padding-top: 20px;
     }
 
     .proyector-login{
         margin-top:20%;
     }
+    .cuadro-login{
+        display: flex;
+        align-items: center;
+        width: 400px;
+        height: 200px;
+        border-style: solid;
+        border-color: black;
+        position:absolute;
+        margin-top: -25%;
+        margin-left: 35%;
+        z-index: 100;
+        border-radius: 25px;
+        background-color: rgb(95, 95, 238);
+    }
+    .cuadro-login2{
+        display: flex;
+        align-items: center;
+        width: 550px;
+        height: 200px;
+        border-style: solid;
+        border-color: black;
+        position:absolute;
+        margin-top: -25%;
+        margin-left: 30%;
+        z-index: 100;
+        border-radius: 25px;
+        background-color: rgb(95, 95, 238);
+    }
+    .mensaje-login{
+        text-align: center;
+        padding-left: 20%;
+    }
+    .mensaje-login2{
+        text-align: center;
+        padding-left: 3%;
 
+    }
+    .boton-login1{
+        display:inline-flex;
+        position: relative;
+        margin-top: 30%;
+        margin-left: -40%;
+
+    }
+    .boton-login2{
+        margin-top: 25%;
+        margin-left: -55%;
+    }
+    .link{
+        text-decoration:none;
+        color: white;
+    }
 
 
 
