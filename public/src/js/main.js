@@ -33,4 +33,3 @@
 //         alert('login exitoso')
 //     }
 // }
-console.log(llave);
