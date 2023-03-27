@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { Router } from "express";
-import { escribirArchivo, leerArchivo ,alertaSI } from "../utils/handlers.js";
+import { escribirArchivo, leerArchivo, alertaSI } from "../utils/handlers.js";
 import { send } from "process";
 import { time, timeEnd } from "console";
 import { Script } from "vm";
@@ -10,15 +10,15 @@ const router = Router();
 //===================GET===================//
 
 router.get('/', (req, res) => {
-    res.render('home');
+	res.render('home', {flag:0} );
 })
 
 router.get('/contacto', (req, res) => {
-    res.render('contacto');
+	res.render('contacto');
 })
 
 router.get('/login', (req, res) => {
-    res.render('login');
+	res.render('login');
 });
 
 // router.post('/app', async (req, res) => {
@@ -48,14 +48,15 @@ router.get('/login', (req, res) => {
 //         res.render("login2")
 //     }       
 // });
-router.post('/app', function(request, response) {
+let user="";
+router.post('/app', function (request, response) {
 	// Capture the input fields
-	let user = request.body.username;
+	user = request.body.username;
 	let pass = request.body.password;
 	// Ensure the input fields exists and are not empty
 	if (user && pass) {
 		// Execute SQL query that'll select the account from the database based on the specified username and password
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [user, pass], function(error, results, fields) {
+		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [user, pass], function (error, results, fields) {
 			// If there is an issue with the query, output the error
 			if (error) throw error;
 			// If the account exists
@@ -77,4 +78,20 @@ router.post('/app', function(request, response) {
 	}
 
 });
+
+router.get('/logout', (req, res) => {
+	//console.log(req.session.loggedin);
+	req.session.destroy();
+	//console.log(req.session.loggedin);
+	res.redirect('/');
+});
+
+router.get('/admin', (req, res) => {
+	if (user == "admin" && req.session.loggedin == true) 
+	{ res.render('admin', {flag:1}) } 
+	else {
+		res.render('/')
+	}
+})
+
 export default router;

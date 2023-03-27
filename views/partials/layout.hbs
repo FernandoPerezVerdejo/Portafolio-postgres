@@ -1,6 +1,7 @@
     {{> head}}
     {{> header}}
     {{> @partial-block}}
+    {{#if flag}}
         <div class="menu-derecho-fijo">
             <div class="boton-menu-derecha" type="button"
                 data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
@@ -14,7 +15,7 @@
                     <button type="button" class="btn-close"
                         data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
+                <div class="offcanvas-body" >
                     <img class="img-user-log" src="../images/user.png">
                     <div class="datos-log">
                         <p class="p-user-log">Email</p>
@@ -23,9 +24,10 @@
                         <p class="p-user-log">Hora Médica</p>
                         <button id="boton-cerrar-sesion" type="button"
                             class="btn
-                            btn-danger">Salir</button>
+                            btn-danger"> <a href="logout" style="text-decoration:none;color:white">Salir</a> </button>
                     </div>
                 </div>
             </div>
         </div>
+        {{/if}}
         {{>footer}}
