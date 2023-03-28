@@ -297,8 +297,29 @@
         color: white;
     }
 
+    .proyector-registro{
+        margin-top: 13%;
+        height: 100%;
+        width: 100%;
+        padding-bottom: 5%;
+    }
 
+    .formularioregistro{
+        display: flex;
+        flex-direction: column;
+        padding:1%;
+        justify-content: center;
+        width: 30%;
+        margin-left: 38%;
+        border-style: solid;
+        border-color: black;
+        border-radius: 25px;
+        background-color:rgba(86, 118, 221, 0.534);
+    }
 
+    .btn-registro{
+        margin-left: 46%;
+    }
 
 
 

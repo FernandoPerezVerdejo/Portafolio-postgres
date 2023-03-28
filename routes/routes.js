@@ -10,12 +10,18 @@ const router = Router();
 //===================GET===================//
 
 router.get('/', (req, res) => {
-	res.render('home', {flag:0} );
-})
+	if (user == ""){
+		res.render('home',{flag:0,Iniciar:1})
+	} else {
+	res.render('home', {flag:1,Iniciar:0} );
+}})
 
 router.get('/contacto', (req, res) => {
-	res.render('contacto');
-})
+	if (user == ""){
+		res.render('contacto',{flag:0,Iniciar:1})
+	} else {
+	res.render('contacto', {flag:1,Iniciar:0} );
+}})
 
 router.get('/login', (req, res) => {
 	res.render('login');
@@ -57,6 +63,7 @@ router.post('/app', function (request, response) {
 	if (user && pass) {
 		// Execute SQL query that'll select the account from the database based on the specified username and password
 		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [user, pass], function (error, results, fields) {
+			console.log(results);
 			// If there is an issue with the query, output the error
 			if (error) throw error;
 			// If the account exists
@@ -84,6 +91,7 @@ router.get('/logout', (req, res) => {
 	req.session.destroy();
 	//console.log(req.session.loggedin);
 	res.redirect('/');
+	user ="";
 });
 
 router.get('/admin', (req, res) => {
@@ -93,5 +101,38 @@ router.get('/admin', (req, res) => {
 		res.render('/')
 	}
 })
+
+router.get('/register',(req,res) =>{
+	res.render('register')
+})
+
+router.post('/register?',(req,res) =>{
+	user = req.body.username;
+	let pass = req.body.password;
+	let email = req.body.email;
+
+	connection.query('SELECT * FROM accounts WHERE username =?',[user], function (error, results, fields){
+		if (error) throw error;
+		if (results[0]) {
+			console.log(results[0]);
+			res.render('home',{flag:0,Iniciar:1})
+		}else {
+			connection.query(`INSERT INTO accounts VALUES (0,'${user}','${pass}','${email}')`)
+			res.render('login')
+		}
+		// results.forEach(elem => {
+		// 	if (user == elem.username ){
+		// 		console.log(elem.username);
+		// 		console.log('usuario ya registrado')}
+			// } else {
+			// 	connection.query(`INSERT INTO accounts VALUES (0,'${user}','${pass}','${email}')`)
+			// 	res.render('login')
+			// }
+		// });
+
+
+	})
+
+} )
 
 export default router;
