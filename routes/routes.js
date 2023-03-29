@@ -11,10 +11,12 @@ const router = Router();
 
 router.get('/', (req, res) => {
 	if (user == ""){
-		res.render('home',{flag:0,Iniciar:1})
-	} else {
-	res.render('home', {flag:1,Iniciar:0} );
-}})
+		res.render('home',{flag:0,Iniciar:1,menuadmin:0})
+	} else if (user != 'admin'){
+	res.render('home', {flag:1,Iniciar:0,menuadmin:0} )
+} else { (user == 'admin') 
+	res.render('home',{flag:1,Iniciar:0,menuadmin:1})
+} })
 
 router.get('/contacto', (req, res) => {
 	if (user == ""){

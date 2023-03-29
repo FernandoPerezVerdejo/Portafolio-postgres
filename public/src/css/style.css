@@ -146,6 +146,7 @@
     /* ----------------footer -------------------*/
 
     .footerindex {
+        display: flex;
         background-color: black;
         position: fixed;
         bottom: 0;
@@ -155,15 +156,20 @@
         margin: auto;
         padding: 3px;
         z-index: 100;
+        align-items: center;
+        justify-content: center;
     }
 
     .pfooter {
         color: azure;
-        text-align: center;
-        height: 20px;
-
+        height: 10px;
     }
-
+    .img-footer{
+    }
+    .contenedor-fotos{
+        position: fixed;
+        margin-left:70%;
+    }
 
     /* ----------------footer -------------------*/
 
