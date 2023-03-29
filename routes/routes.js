@@ -6,6 +6,7 @@ import { time, timeEnd } from "console";
 import { Script } from "vm";
 import connection from "../server.js";
 const router = Router();
+let user="";
 
 //===================GET===================//
 
@@ -56,7 +57,6 @@ router.get('/login', (req, res) => {
 //         res.render("login2")
 //     }       
 // });
-let user="";
 router.post('/app', function (request, response) {
 	// Capture the input fields
 	user = request.body.username;
