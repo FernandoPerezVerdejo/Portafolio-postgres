@@ -4,7 +4,8 @@
     <main class="proyector-login">
         <form class="formulariologin " action="/app" method="post">
             <div class="form-floating mb-3 has-validation">
-                <input type="text" class="form-control is-invalid" name="username"
+                <input type="text" class="form-control is-invalid"
+                    name="username"
                     id="floatingInput1 username"
                     placeholder="name" required>
                 <label for="floatingInput">Usuario</label>
@@ -15,7 +16,8 @@
             <div class="form-floating has-validation">
                 <input type="password" class="form-control is-invalid"
                     name="password"
-                    id="floatingPassword1 password" placeholder="Password" required>
+                    id="floatingPassword1 password" placeholder="Password"
+                    required>
                 <label for="floatingPassword">Contraseña</label>
                 <div class="invalid-feedback">
                     Por favor ingresar Contraseña.
@@ -25,6 +27,8 @@
                 <button type="submit" class="btn btn-primary">Iniciar
                     Sesión</button>
             </ul>
+            <ul class="registro"><a class="link" href="register?"
+                    style="color:blue">Registrarse</a></ul>
         </form>
         <div>
             {{#if mensaje}}
