@@ -91,6 +91,21 @@
         
     }
 
+    .admin{
+        margin-top: 10%;
+        width: 100%;
+        height: 100%;
+        background-color: red;
+    }
+    .contenedor-admin{
+        align-items: center;
+        justify-content: center;
+        display: flexbox;
+        text-align:center;
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+
     /* -----------------------body -----------------------*/
 
 
