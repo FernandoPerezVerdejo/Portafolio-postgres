@@ -6,15 +6,17 @@ import * as helpers from "./utils/helpers/hbs.js";
 import hbs from "hbs";
 import bodyParser from 'body-parser';
 import session from "express-session";
-import mysql from 'mysql';
+import pg from 'pg';
+const { Pool } = pg;
 
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Yuseiwheel2021',
-  database: 'dbportafolio'
-})
+export const pool = new Pool({
+  host: '127.0.0.1',
+  user: 'postgres',
+  database: 'dbportafoliopost',
+  password: '1234',
+  port: 5432
+});
 const app = express();
 
 app.use(session({
@@ -43,4 +45,4 @@ app.use(express.static("public"));
 
 
 app.listen(3000);
-export default connection;
+export default pool;

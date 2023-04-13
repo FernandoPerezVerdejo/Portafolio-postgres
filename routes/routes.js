@@ -4,7 +4,7 @@ import { escribirArchivo, leerArchivo, alertaSI } from "../utils/handlers.js";
 import { send } from "process";
 import { time, timeEnd } from "console";
 import { Script } from "vm";
-import connection from "../server.js";
+import pool from "../server.js";
 const router = Router();
 let user="";
 
@@ -57,36 +57,25 @@ router.get('/login', (req, res) => {
 //         res.render("login2")
 //     }       
 // });
-router.post('/app', function (request, response) {
-	// Capture the input fields
-	user = request.body.username;
-	let pass = request.body.password;
-	// Ensure the input fields exists and are not empty
-	if (user && pass) {
-		// Execute SQL query that'll select the account from the database based on the specified username and password
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [user, pass], function (error, results, fields) {
-			console.log(results);
-			// If there is an issue with the query, output the error
-			if (error) throw error;
-			// If the account exists
-			if (results.length > 0) {
-				// Authenticate the user
-				request.session.loggedin = true;
-				request.session.username = user;
-				// Redirect to home page
-				response.render('login1');
-			} else {
-				response.render('login2');
-			}
+router.post('/app', async (req, res) => {
+	user = req.body.username;
+	let pass = req.body.password;
+    //console.log(req.body.email);
+    //console.log(req.body.password);
+    let result = await pool.query(`select count(*) from pacientes where $1=username and $2=password`, [`${req.body.username}`,`${req.body.password}`]);
+    //console.log(result.rows[0].count);
+    if (result.rows[0].count > 0) {
+        console.log('usuario encontrado');
+		// Authenticate the user
+		req.session.loggedin = true;
+		req.session.username = user;
+		// Redirect to home page
+		res.render('login1');
+    } else { console.log('usuario no encontrado');
+	res.render('login2'); }
 
-			//response.end();
-		});
-	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
-	}
+})
 
-});
 
 router.get('/logout', (req, res) => {
 	//console.log(req.session.loggedin);
@@ -100,26 +89,26 @@ router.get('/admin', (req, res) => {
 	if (user == "admin" && req.session.loggedin == true) 
 	{ res.render('admin', {flag:1}) } 
 	else {
-		res.render('/')
+		res.redirect('/')
 	}
-})
+});
 
 router.get('/register',(req,res) =>{
 	res.render('register')
-})
+});
 
 router.post('/register?',(req,res) =>{
 	user = req.body.username;
 	let pass = req.body.password;
 	let email = req.body.email;
 
-	connection.query('SELECT * FROM accounts WHERE username =?',[user], function (error, results, fields){
+	pool.query('SELECT * FROM users WHERE username =?',[user], function (error, results, fields){
 		if (error) throw error;
 		if (results[0]) {
 			console.log(results[0]);
 			res.render('home',{flag:0,Iniciar:1})
 		}else {
-			connection.query(`INSERT INTO accounts VALUES (0,'${user}','${pass}','${email}')`)
+			pool.query(`INSERT INTO users VALUES (0,'${user}','${pass}','${email}')`)
 			res.render('login')
 		}
 		// results.forEach(elem => {
@@ -133,6 +122,6 @@ router.post('/register?',(req,res) =>{
 		// });
 	})
 
-} )
+});
 
 export default router;

@@ -1,33 +1,54 @@
--- Active: 1679928031758@@127.0.0.1@3306@dbportafolio
-CREATE DATABASE
-    IF NOT EXISTS `dbportafolio` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-USE `dbportafolio`;
-
 CREATE TABLE
-    IF NOT EXISTS `accounts` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `username` varchar(50) NOT NULL,
-        `password` varchar(255) NOT NULL,
-        `email` varchar(100) NOT NULL,
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB AUTO_INCREMENT = 2 DEFAULT CHARSET = utf8;
-
-INSERT INTO
-    `accounts` (
-        `id`,
-        `username`,
-        `password`,
-        `email`
-    )
-VALUES (
-        1,
-        'admin',
-        '1234',
-        'admin@test.com'
+    pacientes (
+        pacientes_id serial PRIMARY KEY NOT NULL,
+        rut_pacientes VARCHAR (50) UNIQUE NOT NULL,
+        nombre VARCHAR(50) NOT NULL,
+        apellido VARCHAR(50) NOT NULL,
+        FechaNac DATE NOT NULL,
+        Direccion VARCHAR(70) NOT NULL,
+        Telefono1 INT NOT NULL,
+        Telefono2 INT,
+        email VARCHAR (30) NOT NULL
     );
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Yuseiwheel2021';
+CREATE TABLE
+    users (
+        users_id serial PRIMARY KEY NOT NULL,
+        rut_users VARCHAR(50) NOT NULL,
+        username VARCHAR (50) NOT NULL,
+        password VARCHAR (50) NOT NULL,
+        creado TIMESTAMP NOT NULL,
+        Rol BOOLEAN NOT NULL
+    );
 
-INSERT INTO `accounts` (`id`,`username`,`password`,`email`)
-VALUES (2,'bryan','1234','bryan@test.com');
+ALTER TABLE users
+ADD CONSTRAINT fk_pacientes_users_rut FOREIGN KEY (rut_users) REFERENCES pacientes(rut_pacientes);
+
+CREATE TABLE Recetas (
+    recetas_id Serial Primary Key NOT NULL,
+    rut_paciente_recetas VARCHAR(50) NOT NULL,
+    rut_medico VARCHAR(50) NOT NULL,
+    Nombre_medico VARCHAR(50) NOT NULL,
+    Especialidad_medico VARCHAR(50) NOT NULL,
+    FechaEmision Timestamp NOT NULL,
+    Vigente BOOLEAN NOT NULL
+);
+
+ALTER TABLE Recetas ADD CONSTRAINT fk_paciente_recetas_rut FOREIGN KEY (rut_paciente_recetas) REFERENCES pacientes(rut_pacientes);
+
+CREATE TABLE RECETA_DETALLE (
+    receta_detalle_id SERIAL PRIMARY KEY NOT NULL,
+    recetas_id_detalle VARCHAR(50) NOT NULL,
+    medicamento INTEGER NOT NULL,
+    prescripcion VARCHAR NOT NULL
+);
+
+
+CREATE TABLE Lista_Medicamento(
+    id_medicamento SERIAL PRIMARY KEY NOT NULL,
+    id_nombre_medicamento VARCHAR NOT NULL,
+    id_contenido VARCHAR NOT NULL
+);
+
+ALTER TABLE RECETA_DETALLE ADD CONSTRAINT fk_receta_recetadetalle FOREIGN KEY (receta_detalle_id) REFERENCES Recetas(recetas_id);
+ALTER TABLE RECETA_DETALLE ADD CONSTRAINT fk_receta_listamedicamento FOREIGN KEY (medicamento) REFERENCES Lista_Medicamento(id_medicamento);
