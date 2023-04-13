@@ -62,7 +62,7 @@ router.post('/app', async (req, res) => {
 	let pass = req.body.password;
     //console.log(req.body.email);
     //console.log(req.body.password);
-    let result = await pool.query(`select count(*) from pacientes where $1=username and $2=password`, [`${req.body.username}`,`${req.body.password}`]);
+    let result = await pool.query(`select count(*) from users where $1=username and $2=password`, [`${req.body.username}`,`${req.body.password}`]);
     //console.log(result.rows[0].count);
     if (result.rows[0].count > 0) {
         console.log('usuario encontrado');
@@ -121,7 +121,6 @@ router.post('/register?',(req,res) =>{
 			// }
 		// });
 	})
-
 });
 
 export default router;

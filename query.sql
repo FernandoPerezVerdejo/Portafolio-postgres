@@ -1,13 +1,14 @@
+CREATE DATABASE dbportafoliopost;
 CREATE TABLE
     pacientes (
         pacientes_id serial PRIMARY KEY NOT NULL,
         rut_pacientes VARCHAR (50) UNIQUE NOT NULL,
         nombre VARCHAR(50) NOT NULL,
         apellido VARCHAR(50) NOT NULL,
-        FechaNac DATE NOT NULL,
-        Direccion VARCHAR(70) NOT NULL,
-        Telefono1 INT NOT NULL,
-        Telefono2 INT,
+        fechaNac DATE NOT NULL,
+        direccion VARCHAR(70) NOT NULL,
+        telefono1 INT NOT NULL,
+        telefono2 INT,
         email VARCHAR (30) NOT NULL
     );
 
@@ -18,25 +19,25 @@ CREATE TABLE
         username VARCHAR (50) NOT NULL,
         password VARCHAR (50) NOT NULL,
         creado TIMESTAMP NOT NULL,
-        Rol BOOLEAN NOT NULL
+        rol BOOLEAN NOT NULL
     );
 
 ALTER TABLE users
 ADD CONSTRAINT fk_pacientes_users_rut FOREIGN KEY (rut_users) REFERENCES pacientes(rut_pacientes);
 
-CREATE TABLE Recetas (
+CREATE TABLE recetas (
     recetas_id Serial Primary Key NOT NULL,
     rut_paciente_recetas VARCHAR(50) NOT NULL,
     rut_medico VARCHAR(50) NOT NULL,
-    Nombre_medico VARCHAR(50) NOT NULL,
-    Especialidad_medico VARCHAR(50) NOT NULL,
-    FechaEmision Timestamp NOT NULL,
-    Vigente BOOLEAN NOT NULL
+    nombre_medico VARCHAR(50) NOT NULL,
+    especialidad_medico VARCHAR(50) NOT NULL,
+    fechaEmision Timestamp NOT NULL,
+    vigente BOOLEAN NOT NULL
 );
 
-ALTER TABLE Recetas ADD CONSTRAINT fk_paciente_recetas_rut FOREIGN KEY (rut_paciente_recetas) REFERENCES pacientes(rut_pacientes);
+ALTER TABLE recetas ADD CONSTRAINT fk_paciente_recetas_rut FOREIGN KEY (rut_paciente_recetas) REFERENCES pacientes(rut_pacientes);
 
-CREATE TABLE RECETA_DETALLE (
+CREATE TABLE receta_detalle (
     receta_detalle_id SERIAL PRIMARY KEY NOT NULL,
     recetas_id_detalle VARCHAR(50) NOT NULL,
     medicamento INTEGER NOT NULL,
@@ -44,11 +45,11 @@ CREATE TABLE RECETA_DETALLE (
 );
 
 
-CREATE TABLE Lista_Medicamento(
+CREATE TABLE lista_medicamento(
     id_medicamento SERIAL PRIMARY KEY NOT NULL,
     id_nombre_medicamento VARCHAR NOT NULL,
     id_contenido VARCHAR NOT NULL
 );
 
-ALTER TABLE RECETA_DETALLE ADD CONSTRAINT fk_receta_recetadetalle FOREIGN KEY (receta_detalle_id) REFERENCES Recetas(recetas_id);
-ALTER TABLE RECETA_DETALLE ADD CONSTRAINT fk_receta_listamedicamento FOREIGN KEY (medicamento) REFERENCES Lista_Medicamento(id_medicamento);
+ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_recetadetalle FOREIGN KEY (receta_detalle_id) REFERENCES recetas(recetas_id);
+ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_listamedicamento FOREIGN KEY (medicamento) REFERENCES lista_medicamento(id_medicamento);
