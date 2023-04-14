@@ -119,7 +119,7 @@ router.post('/register?', async (req, res) => {
 	if (result.rowCount > 0) {
 		res.render('home', { flag: 0, Iniciar: 1 })
 	} else {
-	console.log('no pasa');
+	console.log('no encuentra usuario, INSERTAR');
 	await pool.query(`INSERT INTO pacientes 
 	(rut_pacientes,nombre,apellido,fechanac,direccion,telefono1,telefono2,email) 
 	VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
