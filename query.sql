@@ -2,6 +2,7 @@
 CREATE DATABASE dbportafoliopost;
 
 
+
 CREATE TABLE
     pacientes (
         pacientes_id serial PRIMARY KEY NOT NULL,
