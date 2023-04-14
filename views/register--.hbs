@@ -1,0 +1,48 @@
+{{#> layout}}
+<body class="cuerpo-pagina-login">
+    <main class="proyector-registro">
+        <form class="formularioregistro" action="/register?" method="post">
+            <div class="form-floating mb-3 has-validation">
+                <input type="text" class="form-control is-invalid"
+                    name="username"
+                    id="floatingInput1 username"
+                    placeholder="name" required>
+                <label for="floatingInput">Usuario</label>
+                <div class="invalid-feedback">
+                    Por favor ingresar Usuario.
+                </div>
+            </div>
+            <div class="form-floating has-validation">
+                <input type="password" class="form-control is-invalid"
+                    name="password"
+                    id="floatingPassword1 password" placeholder="Password"
+                    required>
+                <label for="floatingPassword">Contraseña</label>
+                <div class="invalid-feedback">
+                    Por favor ingresar Contraseña.
+                </div>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control is-invalid"
+                    name="email"
+                    id="floatingInput"
+                    placeholder="name@example.com" required>
+                <label for="floatingInput">Correo Eléctronico</label>
+                <div class="invalid-feedback">
+                    Por favor ingresar Correo.
+                </div>
+            </div>
+            <ul class="botonlogin">
+                <button type="submit" class="btn btn-primary btn-registro">Registrar</button>
+            </ul>
+        </form>
+        <div>
+            {{#if mensaje}}
+            {{mensaje}}
+            {{/if}};
+        </div>
+    </main>
+</body>
+
+
+{{/layout}}

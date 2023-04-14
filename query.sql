@@ -1,14 +1,17 @@
+
 CREATE DATABASE dbportafoliopost;
+
+
 CREATE TABLE
     pacientes (
         pacientes_id serial PRIMARY KEY NOT NULL,
         rut_pacientes VARCHAR (50) UNIQUE NOT NULL,
         nombre VARCHAR(50) NOT NULL,
         apellido VARCHAR(50) NOT NULL,
-        fechaNac DATE NOT NULL,
+        fechanac DATE NOT NULL,
         direccion VARCHAR(70) NOT NULL,
-        telefono1 INT NOT NULL,
-        telefono2 INT,
+        telefono1 VARCHAR NOT NULL,
+        telefono2 VARCHAR,
         email VARCHAR (30) NOT NULL
     );
 
@@ -53,3 +56,9 @@ CREATE TABLE lista_medicamento(
 
 ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_recetadetalle FOREIGN KEY (receta_detalle_id) REFERENCES recetas(recetas_id);
 ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_listamedicamento FOREIGN KEY (medicamento) REFERENCES lista_medicamento(id_medicamento);
+
+INSERT INTO pacientes (rut_pacientes,nombre,apellido,fechanac,direccion,telefono1,telefono2,email) 
+VALUES ('19614018-2','Fernando','Perez','24-10-1997','Casa1','962652710','0','fernandoperezverdejo@gmail.com');
+
+INSERT INTO users (rut_users,username,password,creado,rol) 
+VALUES ('19614018-2','admin','1234','now','true');

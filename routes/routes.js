@@ -6,25 +6,28 @@ import { time, timeEnd } from "console";
 import { Script } from "vm";
 import pool from "../server.js";
 const router = Router();
-let user="";
+let user = "";
 
 //===================GET===================//
 
 router.get('/', (req, res) => {
-	if (user == ""){
-		res.render('home',{flag:0,Iniciar:1,menuadmin:0})
-	} else if (user != 'admin'){
-	res.render('home', {flag:1,Iniciar:0,menuadmin:0} )
-} else { (user == 'admin') 
-	res.render('home',{flag:1,Iniciar:0,menuadmin:1})
-} })
+	if (user == "") {
+		res.render('home', { flag: 0, Iniciar: 1, menuadmin: 0 })
+	} else if (user != 'admin') {
+		res.render('home', { flag: 1, Iniciar: 0, menuadmin: 0 })
+	} else {
+		(user == 'admin')
+		res.render('home', { flag: 1, Iniciar: 0, menuadmin: 1 })
+	}
+})
 
 router.get('/contacto', (req, res) => {
-	if (user == ""){
-		res.render('contacto',{flag:0,Iniciar:1})
+	if (user == "") {
+		res.render('contacto', { flag: 0, Iniciar: 1 })
 	} else {
-	res.render('contacto', {flag:1,Iniciar:0} );
-}})
+		res.render('contacto', { flag: 1, Iniciar: 0 });
+	}
+})
 
 router.get('/login', (req, res) => {
 	res.render('login');
@@ -60,19 +63,21 @@ router.get('/login', (req, res) => {
 router.post('/app', async (req, res) => {
 	user = req.body.username;
 	let pass = req.body.password;
-    //console.log(req.body.email);
-    //console.log(req.body.password);
-    let result = await pool.query(`select count(*) from users where $1=username and $2=password`, [`${req.body.username}`,`${req.body.password}`]);
-    //console.log(result.rows[0].count);
-    if (result.rows[0].count > 0) {
-        console.log('usuario encontrado');
+	//console.log(req.body.email);
+	//console.log(req.body.password);
+	let result = await pool.query(`select count(*) from users where $1=username and $2=password`, [`${req.body.username}`, `${req.body.password}`]);
+	//console.log(result.rows[0].count);
+	if (result.rows[0].count > 0) {
+		console.log('usuario encontrado');
 		// Authenticate the user
 		req.session.loggedin = true;
 		req.session.username = user;
 		// Redirect to home page
 		res.render('login1');
-    } else { console.log('usuario no encontrado');
-	res.render('login2'); }
+	} else {
+		console.log('usuario no encontrado');
+		res.render('login2');
+	}
 
 })
 
@@ -82,45 +87,48 @@ router.get('/logout', (req, res) => {
 	req.session.destroy();
 	//console.log(req.session.loggedin);
 	res.redirect('/');
-	user ="";
+	user = "";
 });
 
 router.get('/admin', (req, res) => {
-	if (user == "admin" && req.session.loggedin == true) 
-	{ res.render('admin', {flag:1}) } 
+	if (user == "admin" && req.session.loggedin == true) { res.render('admin', { flag: 1 }) }
 	else {
 		res.redirect('/')
 	}
 });
 
-router.get('/register',(req,res) =>{
+router.get('/register', (req, res) => {
 	res.render('register')
 });
 
-router.post('/register?',(req,res) =>{
+router.post('/register?', async (req, res) => {
+	let rut = req.body.rut;
+	let nombre = req.body.nombre;
+	let apellido = req.body.apellido;
+	let fechanac = req.body.fechanac;
+	let direccion = req.body.direccion;
+	let telefono1 = req.body.telefono1;
+	let telefono2 = req.body.telefono2;
 	user = req.body.username;
 	let pass = req.body.password;
 	let email = req.body.email;
 
-	pool.query('SELECT * FROM users WHERE username =?',[user], function (error, results, fields){
-		if (error) throw error;
-		if (results[0]) {
-			console.log(results[0]);
-			res.render('home',{flag:0,Iniciar:1})
-		}else {
-			pool.query(`INSERT INTO users VALUES (0,'${user}','${pass}','${email}')`)
-			res.render('login')
-		}
-		// results.forEach(elem => {
-		// 	if (user == elem.username ){
-		// 		console.log(elem.username);
-		// 		console.log('usuario ya registrado')}
-			// } else {
-			// 	connection.query(`INSERT INTO accounts VALUES (0,'${user}','${pass}','${email}')`)
-			// 	res.render('login')
-			// }
-		// });
-	})
+
+	let result = await pool.query('SELECT * FROM users WHERE $1=username', [user]);
+	console.log(result.rowCount);
+	if (result.rowCount > 0) {
+		res.render('home', { flag: 0, Iniciar: 1 })
+	} else {
+	console.log('no pasa');
+	await pool.query(`INSERT INTO pacientes 
+	(rut_pacientes,nombre,apellido,fechanac,direccion,telefono1,telefono2,email) 
+	VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+	[`${rut}`,`${nombre}`,`${apellido}`,`${fechanac}`,`${direccion}`,`${telefono1}`,`${telefono2}`,`${email}`]);
+	await pool.query(`INSERT INTO users (rut_users,username,password,creado,rol) VALUES ($1,$2,$3,$4,$5)`,
+	[`${rut}`,`${user}`,`${pass}`,`now`,`false`]);
+	//pool.query(`INSERT INTO users VALUES (0,'19614018-2','${user}','${pass}','now','false')`)
+		res.render('login')
+	}
 });
 
 export default router;
