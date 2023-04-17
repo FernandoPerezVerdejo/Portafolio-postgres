@@ -31,9 +31,12 @@
                     style="color:blue">Registrarse</a></ul>
         </form>
         <div>
-            {{#if mensaje}}
-            {{mensaje}}
-            {{/if}};
+            {{#if exitoso}}
+            <h1>Login Exitoso</h1>
+            {{/if}}
+            {{#if error}}
+            <h1>Usuario o Contraseña Incorrectos</h1>
+            {{/if}}
         </div>
     </main>
 </body>

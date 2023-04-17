@@ -33,6 +33,16 @@ router.get('/login', (req, res) => {
 	res.render('login');
 });
 
+router.get('/recetario', async (req, res) => {
+	// validacion de usuario logeado
+	//let receta = await pool.query('SELECT * FROM users WHERE $1=username', [usuario logeado]);
+	res.render('recetario',{receta:1});
+});
+
+router.get('/calendario', (req, res) => {
+	res.render('calendario');
+});
+
 // router.post('/app', async (req, res) => {
 //     let user = req.body.user;
 //     let pass = req.body.pass;
@@ -66,17 +76,24 @@ router.post('/app', async (req, res) => {
 	//console.log(req.body.email);
 	//console.log(req.body.password);
 	let result = await pool.query(`select count(*) from users where $1=username and $2=password`, [`${req.body.username}`, `${req.body.password}`]);
-	//console.log(result.rows[0].count);
+
+	let objusuario= await pool.query(`select * from users where $1=username and $2=password`, [`${req.body.username}`, `${req.body.password}`]); 
+	//console.log(objusuario.rows[0].users_id); traer valores de usuario 
+	//console.log(objusuario.rows); //traer usuario como objeto
+	//console.log(objusuario.rows[0].rol); //traer rol
+
+
+	//console.log(result);
 	if (result.rows[0].count > 0) {
 		console.log('usuario encontrado');
 		// Authenticate the user
 		req.session.loggedin = true;
 		req.session.username = user;
 		// Redirect to home page
-		res.render('login1');
+		res.render('login',{exitoso:1});
 	} else {
 		console.log('usuario no encontrado');
-		res.render('login2');
+		res.render('login',{error:1});
 	}
 
 })
@@ -126,7 +143,7 @@ router.post('/register?', async (req, res) => {
 	[`${rut}`,`${nombre}`,`${apellido}`,`${fechanac}`,`${direccion}`,`${telefono1}`,`${telefono2}`,`${email}`]);
 	await pool.query(`INSERT INTO users (rut_users,username,password,creado,rol) VALUES ($1,$2,$3,$4,$5)`,
 	[`${rut}`,`${user}`,`${pass}`,`now`,`false`]);
-	//pool.query(`INSERT INTO users VALUES (0,'19614018-2','${user}','${pass}','now','false')`)
+	// ejemplo insert pool.query(`INSERT INTO users VALUES (0,'19614018-2','${user}','${pass}','now','false')`)
 		res.render('login')
 	}
 });
