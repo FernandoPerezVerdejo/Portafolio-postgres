@@ -13,10 +13,10 @@ let objusuario = ""
 router.get('/', (req, res) => {
 	if (objusuario == "") {
 		res.render('home', { flag: 0, Iniciar: 1, menuadmin: 0 })
-	} else if (!objusuario) {
+	} else if (objusuario.rows[0].rol < 1 ) {
 		res.render('home', { flag: 1, Iniciar: 0, menuadmin: 0 })
 	} else {
-		(objusuario.rows[0].rol)
+		(objusuario.rows[0].rol == 2)
 		res.render('home', { flag: 1, Iniciar: 0, menuadmin: 1 })
 	}
 })
@@ -111,7 +111,7 @@ router.get('/admin', (req, res) => {
 	console.log(objusuario.rows[0].rol);
 	console.log(req.session.loggedin);
 	//cambiar el rol por 0 = paciente , 1 =medico ,2 = admin
-	if (objusuario.rows[0].rol && req.session.loggedin)
+	if (objusuario.rows[0].rol == '2' && req.session.loggedin)
 	res.render('admin', { flag: 1 }) 
 	else {
 		res.redirect('/')
@@ -146,7 +146,7 @@ await pool.query(`INSERT INTO pacientes
 		[`${rut}`, `${nombre}`, `${apellido}`, `${fechanac}`, `${direccion}`, `${telefono1}`, `${telefono2}`, `${email}`]);
 await pool.query(`INSERT INTO users (rut_users,username,password,creado,rol) 
 		VALUES ($1,$2,$3,$4,$5)`,
-		[`${rut}`, `${user}`, `${pass}`, `now`, `false`]);
+		[`${rut}`, `${user}`, `${pass}`, `now`, `0`]);
 		// ejemplo insert pool.query(`INSERT INTO users VALUES (0,'19614018-2','${user}','${pass}','now','false')`)
 		res.render('login')
 	}
