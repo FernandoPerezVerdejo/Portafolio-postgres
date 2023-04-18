@@ -1,0 +1,33 @@
+{{#> layout}}
+<body class="admin">
+    <div class="contenedor-admin">
+        <img class="img-admin"
+            src="https://media.tenor.com/38l5OsYy2TsAAAAC/elmo-flaming.gif"
+            alt="" srcset="">
+        <h1>Médico</h1>
+
+        <div>
+            <form action="/buscarpaciente" method="get">
+                <input type="text" name="rut" placeholder="Rut" required>
+                <ul>
+                    <button type="submit">Buscar Paciente</button>
+                </ul>
+            </form>
+        </div>
+
+        {{#if datareceta}}
+        <div>
+            
+            {{nombre}}a
+            {{rut}}b
+            {{vigencia}}c
+
+            {{else}}
+            <h4>No se encontraron dato</h4>
+        </div>
+        {{/if}}
+
+
+    </div>
+</body>
+{{/layout}}

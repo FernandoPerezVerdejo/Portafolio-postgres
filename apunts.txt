@@ -4,9 +4,9 @@ Roles 0	paciente
 
 
 
--ingresos a paginas con permisos segun el rol 
--mantener los datos del usuario logeado* opcion de mantenerlos como variable global
--eliminar paginas innecesarias (cuadros de login) y cambiarlos por mensajes condicionales 
+-ingresos a paginas con permisos segun el rol ok
+-mantener los datos del usuario logeado* opcion de mantenerlos como variable global ok
+-eliminar paginas innecesarias (cuadros de login) y cambiarlos por mensajes condicionales ok
 -actualizar informacion del modal de usuarios
 -agregar paginas especiales para admin 
 -agregar pagina para crear recetas para el medico
