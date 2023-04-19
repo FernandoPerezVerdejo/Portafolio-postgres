@@ -3,8 +3,7 @@ CREATE DATABASE dbportafoliopost;
 
 
 
-CREATE TABLE
-    pacientes (
+CREATE TABLE pacientes (
         pacientes_id serial PRIMARY KEY NOT NULL,
         rut_pacientes VARCHAR (50) UNIQUE NOT NULL,
         nombre VARCHAR(50) NOT NULL,

@@ -2,22 +2,26 @@ import * as fs from "fs";
 import { Router } from "express";
 import { escribirArchivo, leerArchivo, alertaSI } from "../utils/handlers.js";
 import { send } from "process";
-import { time, timeEnd } from "console";
+import { error, time, timeEnd } from "console";
 import { Script } from "vm";
 import pool from "../server.js";
+import { NONAME } from "dns";
 const router = Router();
 let objusuario = "";
+let datareceta ="";
 
 //===================GET===================//
 
 router.get('/', (req, res) => {
 	if (objusuario == "") {
 		res.render('home', { flag: 0, Iniciar: 1, Menu: 0, menuadmin: 0, Registro: 1 })
-	} else if (objusuario.rows[0].rol < 1) {
+	} else if (objusuario.rows[0].rol == '0') {
 		res.render('home', { flag: 1, Iniciar: 0, Menu: 1, menuadmin: 0, Registro: 0 })
+	}else if (objusuario.rows[0].rol == '1') {
+		res.render('home', { flag: 1, Iniciar: 0, Menu: 1, menuadmin: 0, Registro: 0, Medico:1 })
 	} else {
-		(objusuario.rows[0].rol == 2)
-		res.render('home', { flag: 1, Iniciar: 0, Menu: 1, menuadmin: 1, Registro: 0 })
+		(objusuario.rows[0].rol == '2')
+		res.render('home', { flag: 1, Iniciar: 0, Menu: 1, menuadmin: 1, Registro: 0, Medico:1 })
 	}
 })
 
@@ -176,12 +180,24 @@ router.get('/medico', async (req, res) => {
 	console.log(req.session.loggedin);
 	if (req.session.loggedin) {
 		if (objusuario.rows[0].rol ==='1' || objusuario.rows[0].rol ==='2') {
-			res.render('medico',{datareceta:1})
+			res.render('medico',{datareceta:NONAME})
 		} else { res.redirect('/')}
 	}
 	else {
 		res.redirect('/');
 	}
 })
+
+router.post('/buscarpaciente',async (req,res) => {
+	let result = await pool.query('SELECT * FROM pacientes where $1=rut_pacientes',[`${req.body.rut}`]);
+	if (result.rows ==[]){
+		console.log('error');
+	}else{
+	datareceta=result.rows[0];
+	console.log(datareceta);
+	//console.log(datareceta[0].rut_pacientes);
+	//console.log(datareceta[0].nombre);
+	res.render('medico',{datareceta})}
+});
 
 export default router;

@@ -7,7 +7,7 @@
         <h1>Médico</h1>
 
         <div>
-            <form action="/buscarpaciente" method="get">
+            <form action="/buscarpaciente" method="post">
                 <input type="text" name="rut" placeholder="Rut" required>
                 <ul>
                     <button type="submit">Buscar Paciente</button>
@@ -16,14 +16,12 @@
         </div>
 
         {{#if datareceta}}
-        <div>
-            
-            {{nombre}}a
-            {{rut}}b
-            {{vigencia}}c
-
+        <div class="datos">
+            <h1>{{datareceta.rut_pacientes}}</h1>
+            <h1>{{datareceta.nombre}}</h1>
+            <h1>{{datareceta.apellido}}</h1>
             {{else}}
-            <h4>No se encontraron dato</h4>
+            <h4>No se encontraron datos</h4>
         </div>
         {{/if}}
 
