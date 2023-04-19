@@ -8,8 +8,8 @@ Roles 0	paciente
 -mantener los datos del usuario logeado* opcion de mantenerlos como variable global ok
 -eliminar paginas innecesarias (cuadros de login) y cambiarlos por mensajes condicionales ok
 -actualizar informacion del modal de usuarios
--agregar paginas especiales para admin 
--agregar pagina para crear recetas para el medico
+-agregar paginas especiales para admin , hecho el registro de medico
+-agregar pagina para crear recetas para el medico , hecha busqueda por rut
 -calendario + aviso 
 -modificacion total de CSS en apariencia
 -pagina para mostrar receta segun el usuario actual

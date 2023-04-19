@@ -5,7 +5,7 @@ import { send } from "process";
 import { error, time, timeEnd } from "console";
 import { Script } from "vm";
 import pool from "../server.js";
-import { NONAME } from "dns";
+import { NONAME, NOTFOUND } from "dns";
 const router = Router();
 let objusuario = "";
 let datareceta ="";
@@ -180,7 +180,7 @@ router.get('/medico', async (req, res) => {
 	console.log(req.session.loggedin);
 	if (req.session.loggedin) {
 		if (objusuario.rows[0].rol ==='1' || objusuario.rows[0].rol ==='2') {
-			res.render('medico',{datareceta:NONAME})
+			res.render('medico',{datareceta:NONAME,btnanadir:0})
 		} else { res.redirect('/')}
 	}
 	else {
@@ -190,14 +190,14 @@ router.get('/medico', async (req, res) => {
 
 router.post('/buscarpaciente',async (req,res) => {
 	let result = await pool.query('SELECT * FROM pacientes where $1=rut_pacientes',[`${req.body.rut}`]);
-	if (result.rows ==[]){
+	if (result.rows == []){
 		console.log('error');
 	}else{
 	datareceta=result.rows[0];
-	console.log(datareceta);
+	//console.log(datareceta);
 	//console.log(datareceta[0].rut_pacientes);
 	//console.log(datareceta[0].nombre);
-	res.render('medico',{datareceta})}
+	res.render('medico',{datareceta,btnanadir:1})}
 });
 
 export default router;

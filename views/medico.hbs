@@ -20,6 +20,9 @@
             <h1>{{datareceta.rut_pacientes}}</h1>
             <h1>{{datareceta.nombre}}</h1>
             <h1>{{datareceta.apellido}}</h1>
+            {{#if btnanadir}}
+            <a class="añadir"><button>Añadir Receta</button></a>
+            {{/if}}
             {{else}}
             <h4>No se encontraron datos</h4>
         </div>
