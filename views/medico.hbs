@@ -21,7 +21,12 @@
             <h1>{{datareceta.nombre}}</h1>
             <h1>{{datareceta.apellido}}</h1>
             {{#if btnanadir}}
-            <a class="añadir"><button>Añadir Receta</button></a>
+            <form action="/buscarreceta{{datareceta.rut_pacientes}}" method="post">
+                <a class="buscar"><button type="submit">Buscar Receta</button></a>
+            </form>
+            <form action="/anadirreceta{{datareceta.rut_pacientes}}" method="post">
+                <a class="añadir"><button type="submit">Añadir Receta</button></a>
+            </form>
             {{/if}}
             {{else}}
             <h4>No se encontraron datos</h4>
