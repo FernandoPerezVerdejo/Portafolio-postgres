@@ -21,12 +21,14 @@
             <h5>Nombre: {{datareceta.nombre}}</h5>
             <h5>Apellido: {{datareceta.apellido}}</h5>
             {{#if btnanadir}}
-            <form action="/buscarreceta{{datareceta.rut_pacientes}}"
+            <form action="/buscarreceta/"
                 method="post">
+                <input type="hidden" name="rut"
+                    value="{{datareceta.rut_pacientes}}">
                 <a class="buscar"><button class="btn btn-primary" type="submit">Buscar
                         Receta</button></a>
             </form>
-            <form action="/anadirreceta{{datareceta.rut_pacientes}}"
+            <form action="/anadirreceta/{{datareceta.rut_pacientes}}"
                 method="post">
                 <a class="añadir"><button class="btn btn-primary" type="submit">Añadir
                         Receta</button></a>
@@ -39,7 +41,9 @@
         {{#if receta}}
         {{#each resultadoreceta1}}
         <div class="receta">
-            <form action="/modificar/{{recetas_id}}" method="post">
+            <form action="/modificar" method="post">
+                <input type="hidden" name="id"
+                    value="{{recetas_id}}">
                 <ul>Rut Paciente: <input type="text" name="rut_paciente_recetas"
                         placeholder="Rut" value="{{this.rut_paciente_recetas}}"
                         required></ul>
@@ -51,8 +55,11 @@
                 <a class="modificar"><button class="btn btn-primary"
                         type="submit">Modificar</button></a>
             </form>
-            <form action="/eliminar/{{recetas_id}}" method="post">
-            <a class="eliminar"><button class="btn btn-danger" type="submit">Eliminar</button></a>
+            <form action="/eliminar" method="post">
+                <input type="hidden" name="id"
+                    value="{{recetas_id}}">
+                <a class="eliminar"><button class="btn btn-danger"
+                        type="submit">Eliminar</button></a>
             </form>
         </div>
         {{/each}}

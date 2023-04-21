@@ -189,7 +189,7 @@ router.get('/medico', async (req, res) => {
 	}
 })
 
-router.post('/buscarpaciente', async (req, res) => {
+router.post('/buscarpaciente/', async (req, res) => {
 	let result = await pool.query('SELECT * FROM pacientes where $1=rut_pacientes', [`${req.body.rut}`]);
 	if (result.rows == []) {
 		console.log('error');
@@ -202,8 +202,8 @@ router.post('/buscarpaciente', async (req, res) => {
 	}
 });
 
-router.post('/buscarreceta:rut', async (req, res) => {
-	let rut = req.params.rut;
+router.post('/buscarreceta/', async (req, res) => {
+	let rut = req.body.rut;
 	//console.log('pasa');
 	//console.log(rut); //ya se muestra bien el rut
 	let result = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rut]);
@@ -225,7 +225,7 @@ router.post('/buscarreceta:rut', async (req, res) => {
 	}
 });
 
-router.post('/anadirreceta:rut', async (req, res) => {
+router.post('/anadirreceta/', async (req, res) => {
 	let rut = req.params.rut;
 	//console.log(rut);
 	//console.log(objusuario.rows);
@@ -233,13 +233,13 @@ router.post('/anadirreceta:rut', async (req, res) => {
 	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rut, objusuario.rows[0].rut_users, 'MEDICO', 'CARDIOLOGO', 'now', 'true']);
 });
 
-router.post('/modificar/:id', async (req, res) => {
-	let id = req.params.id;
+router.post('/modificar/', async (req, res) => {
+	let id = req.body.id;
 	console.log(id);
 });
 
-router.post('/eliminar/:id', async (req, res) => {
-	let id = req.params.id;
+router.post('/eliminar/', async (req, res) => {
+	let id = req.body.id;
 	console.log(id);
 });
 
