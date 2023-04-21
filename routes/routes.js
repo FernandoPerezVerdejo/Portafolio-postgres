@@ -218,8 +218,9 @@ router.post('/buscarreceta/', async (req, res) => {
 		//console.log(resultadoreceta);
 		resultadoreceta.rows.forEach(element => {
 			if (element.vigente == true) {
-				element.vigente= "Vigente";
-			} else element.vigente = "No Vigente"});
+				element.vigente = "Vigente";
+			} else element.vigente = "No Vigente"
+		});
 		let resultadoreceta1 = resultadoreceta.rows;
 		res.render('medico', { receta: "esta(s) son las recetas disponibles", resultadoreceta1 })
 	}
