@@ -5,35 +5,46 @@
             src="https://media.tenor.com/38l5OsYy2TsAAAAC/elmo-flaming.gif"
             alt="" srcset="">
         <h1>Médico</h1>
-
         <div>
             <form action="/buscarpaciente" method="post">
                 <input type="text" name="rut" placeholder="Rut" required>
                 <ul>
-                    <button type="submit">Buscar Paciente</button>
+                    <button class="btn btn-primary" type="submit">Buscar Paciente</button>
                 </ul>
             </form>
         </div>
 
         {{#if datareceta}}
         <div class="datos">
-            <h1>{{datareceta.rut_pacientes}}</h1>
-            <h1>{{datareceta.nombre}}</h1>
-            <h1>{{datareceta.apellido}}</h1>
+            <h5>{{datareceta.rut_pacientes}}</h5>
+            <h5>{{datareceta.nombre}}</h5>
+            <h5>{{datareceta.apellido}}</h5>
             {{#if btnanadir}}
             <form action="/buscarreceta{{datareceta.rut_pacientes}}" method="post">
-                <a class="buscar"><button type="submit">Buscar Receta</button></a>
+                <a class="buscar"><button class="btn btn-primary" type="submit">Buscar Receta</button></a>
             </form>
             <form action="/anadirreceta{{datareceta.rut_pacientes}}" method="post">
-                <a class="añadir"><button type="submit">Añadir Receta</button></a>
+                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir Receta</button></a>
             </form>
             {{/if}}
             {{else}}
             <h4>No se encontraron datos</h4>
         </div>
         {{/if}}
+    {{#if receta}}
+        {{#each resultadoreceta1}}
+    <div class="receta">
+        <ul>{{this.rut_paciente_recetas}}</ul>
+        <ul>{{this.rut_medico}}</ul>
+        <ul>{{this.nombre_medico}}</ul>
+        <ul>{{this.especialidad_medico}}</ul>
+        <ul>{{this.fechaemision}}</ul>
+        <ul>{{this.vigente}}</ul>
+    </div>
+        {{/each}}
 
-
+    {{else}}
+    {{/if}}
     </div>
 </body>
 {{/layout}}

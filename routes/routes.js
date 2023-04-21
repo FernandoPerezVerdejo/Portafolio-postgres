@@ -208,11 +208,16 @@ router.post('/buscarreceta:rut', async (req, res) => {
 	console.log(rut); //ya se muestra bien el rut
 	let result = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rut]);
 	if (result.rows[0].count == 0) {
+		//res.render('medico',{receta:"no hay receta(s) disponibles"})
 		console.log('no hay recetas');
 	} else {
-		//mostrar recetas
 		console.log(result.rows[0].count);
 		console.log('se encontro receta(s)');
+		//mostrar recetas
+		let resultadoreceta = await pool.query('SELECT rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente FROM recetas where rut_paciente_recetas=$1',[rut]);
+		console.log(resultadoreceta);
+		let resultadoreceta1=resultadoreceta.rows;
+		res.render('medico',{receta:"esta(s) son las recetas disponibles",resultadoreceta1})
 	}
 });
 
