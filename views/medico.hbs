@@ -9,42 +9,56 @@
             <form action="/buscarpaciente" method="post">
                 <input type="text" name="rut" placeholder="Rut" required>
                 <ul>
-                    <button class="btn btn-primary" type="submit">Buscar Paciente</button>
+                    <button class="btn btn-primary" type="submit">Buscar
+                        Paciente</button>
                 </ul>
             </form>
         </div>
 
         {{#if datareceta}}
         <div class="datos">
-            <h5>{{datareceta.rut_pacientes}}</h5>
-            <h5>{{datareceta.nombre}}</h5>
-            <h5>{{datareceta.apellido}}</h5>
+            <h5>Rut Paciente:{{datareceta.rut_pacientes}}</h5>
+            <h5>Nombre: {{datareceta.nombre}}</h5>
+            <h5>Apellido: {{datareceta.apellido}}</h5>
             {{#if btnanadir}}
-            <form action="/buscarreceta{{datareceta.rut_pacientes}}" method="post">
-                <a class="buscar"><button class="btn btn-primary" type="submit">Buscar Receta</button></a>
+            <form action="/buscarreceta{{datareceta.rut_pacientes}}"
+                method="post">
+                <a class="buscar"><button class="btn btn-primary" type="submit">Buscar
+                        Receta</button></a>
             </form>
-            <form action="/anadirreceta{{datareceta.rut_pacientes}}" method="post">
-                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir Receta</button></a>
+            <form action="/anadirreceta{{datareceta.rut_pacientes}}"
+                method="post">
+                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir
+                        Receta</button></a>
             </form>
             {{/if}}
             {{else}}
             <h4>No se encontraron datos</h4>
         </div>
         {{/if}}
-    {{#if receta}}
+        {{#if receta}}
         {{#each resultadoreceta1}}
-    <div class="receta">
-        <ul>{{this.rut_paciente_recetas}}</ul>
-        <ul>{{this.rut_medico}}</ul>
-        <ul>{{this.nombre_medico}}</ul>
-        <ul>{{this.especialidad_medico}}</ul>
-        <ul>{{this.fechaemision}}</ul>
-        <ul>{{this.vigente}}</ul>
-    </div>
+        <div class="receta">
+            <form action="/modificar/{{recetas_id}}" method="post">
+                <ul>Rut Paciente: <input type="text" name="rut_paciente_recetas"
+                        placeholder="Rut" value="{{this.rut_paciente_recetas}}"
+                        required></ul>
+                <ul>Rut Médico: {{this.rut_medico}}</ul>
+                <ul>Nombre Médico: {{this.nombre_medico}}</ul>
+                <ul>Especialidad: {{this.especialidad_medico}}</ul>
+                <ul>Fecha Emisión: {{this.fechaemision}}</ul>
+                <ul>Estado: {{this.vigente}}</ul>
+                <a class="modificar"><button class="btn btn-primary"
+                        type="submit">Modificar</button></a>
+            </form>
+            <form action="/eliminar/{{recetas_id}}" method="post">
+            <a class="eliminar"><button class="btn btn-danger" type="submit">Eliminar</button></a>
+            </form>
+        </div>
         {{/each}}
 
-    {{else}}
-    {{/if}}
+        {{else}}
+        {{/if}}
     </div>
 </body>
 {{/layout}}

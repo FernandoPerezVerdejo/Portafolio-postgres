@@ -195,7 +195,7 @@ router.post('/buscarpaciente', async (req, res) => {
 		console.log('error');
 	} else {
 		datareceta = result.rows[0];
-		console.log(datareceta);
+		//console.log(datareceta);
 		//console.log(datareceta[0].rut_pacientes);
 		//console.log(datareceta[0].nombre);
 		res.render('medico', { datareceta, btnanadir: 1, Medico: 1 })
@@ -205,28 +205,42 @@ router.post('/buscarpaciente', async (req, res) => {
 router.post('/buscarreceta:rut', async (req, res) => {
 	let rut = req.params.rut;
 	//console.log('pasa');
-	console.log(rut); //ya se muestra bien el rut
+	//console.log(rut); //ya se muestra bien el rut
 	let result = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rut]);
 	if (result.rows[0].count == 0) {
 		//res.render('medico',{receta:"no hay receta(s) disponibles"})
-		console.log('no hay recetas');
+		//console.log('no hay recetas');
 	} else {
-		console.log(result.rows[0].count);
-		console.log('se encontro receta(s)');
+		//console.log(result.rows[0].count);
+		//console.log('se encontro receta(s)');
 		//mostrar recetas
-		let resultadoreceta = await pool.query('SELECT rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente FROM recetas where rut_paciente_recetas=$1',[rut]);
-		console.log(resultadoreceta);
-		let resultadoreceta1=resultadoreceta.rows;
-		res.render('medico',{receta:"esta(s) son las recetas disponibles",resultadoreceta1})
+		let resultadoreceta = await pool.query('SELECT * FROM recetas where rut_paciente_recetas=$1', [rut]);
+		//console.log(resultadoreceta);
+		resultadoreceta.rows.forEach(element => {
+			if (element.vigente == true) {
+				element.vigente= "Vigente";
+			} else element.vigente = "No Vigente"});
+		let resultadoreceta1 = resultadoreceta.rows;
+		res.render('medico', { receta: "esta(s) son las recetas disponibles", resultadoreceta1 })
 	}
 });
 
 router.post('/anadirreceta:rut', async (req, res) => {
 	let rut = req.params.rut;
-	console.log(rut);
-	console.log(objusuario.rows);
-	console.log(objusuario.rows[0].rut_users);
-	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rut,objusuario.rows[0].rut_users,'MEDICO','CARDIOLOGO','now','true']);
+	//console.log(rut);
+	//console.log(objusuario.rows);
+	//console.log(objusuario.rows[0].rut_users);
+	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rut, objusuario.rows[0].rut_users, 'MEDICO', 'CARDIOLOGO', 'now', 'true']);
+});
+
+router.post('/modificar/:id', async (req, res) => {
+	let id = req.params.id;
+	console.log(id);
+});
+
+router.post('/eliminar/:id', async (req, res) => {
+	let id = req.params.id;
+	console.log(id);
 });
 
 export default router;
