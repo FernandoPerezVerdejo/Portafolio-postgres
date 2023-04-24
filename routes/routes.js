@@ -87,7 +87,6 @@ router.get('/logout', (req, res) => {
 router.get('/admin', (req, res) => {
 	//console.log(objusuario.rows[0].rol);
 	//console.log(req.session.loggedin);
-	//cambiar el rol por 0 = paciente , 1 =medico ,2 = admin
 	if (objusuario.rows[0].rol == '2' && req.session.loggedin)
 		res.render('admin', { flag: 1 })
 	else {
@@ -220,7 +219,7 @@ router.post('/buscarreceta/', async (req, res) => {
 			} else element.vigente = "No Vigente"
 		});
 		let resultadoreceta1 = resultadoreceta.rows;
-		res.render('medico', { receta: "esta(s) son las recetas disponibles", resultadoreceta1 })
+		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1 })
 	}
 });
 
@@ -233,9 +232,9 @@ router.post('/anadirreceta/', async (req, res) => {
 	let prescripcion=req.body.prescripcion;
 	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rutpaciente, rutmedico, nommedico, especialidad, 'now', 'true']);
 	let idreceta = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1',[rutpaciente]);
-	//console.log(idreceta.rows[0].count);
+	//console.log(idreceta.rows[0].count); buscar el id_receta
 	let medicamento = await pool.query('SELECT id_medicamento FROM lista_medicamento where id_nombre_medicamento=$1',[medicamento0]);
-	//console.log(medicamento.rows[0].id_medicamento);
+	//console.log(medicamento.rows[0].id_medicamento); buscar el id del medicamento
 	let result2= await pool.query('INSERT INTO receta_detalle (recetas_id_detalle,medicamento,prescripcion) VALUES ($1,$2,$3)',[idreceta.rows[0].count,medicamento.rows[0].id_medicamento,prescripcion]);
 	res.render('medico',{message:"Receta Añadida Exitosamente"});
 });
