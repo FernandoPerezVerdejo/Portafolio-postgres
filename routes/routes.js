@@ -1,12 +1,6 @@
-import * as fs from "fs";
 import { Router } from "express";
-import { escribirArchivo, leerArchivo, alertaSI } from "../utils/handlers.js";
-import { send } from "process";
-import { error, time, timeEnd } from "console";
-import { Script } from "vm";
 import pool from "../server.js";
-import { NONAME, NOTFOUND } from "dns";
-import { createDiffieHellmanGroup } from "crypto";
+import { NONAME, NOTFOUND, TIMEOUT } from "dns";
 const router = Router();
 let objusuario = "";
 let datareceta = "";
@@ -70,7 +64,7 @@ router.post('/app', async (req, res) => {
 	//console.log(objusuario.rows[0].rol); //traer rol
 	//console.log(result);
 	if (result.rows[0].count > 0) {
-		console.log('usuario encontrado');
+		//console.log('usuario encontrado');
 		// Authenticate the user
 		req.session.loggedin = true;
 		req.session.username = user;
@@ -164,7 +158,7 @@ router.post('/registromedico', async (req, res) => {
 	if (result.rowCount > 0) {
 		res.render('home', { flag: 0, Iniciar: 1, Registro: 1 })
 	} else {
-		console.log('no encuentra usuario, INSERTAR');
+		//console.log('no encuentra usuario, INSERTAR');
 		await pool.query(`INSERT INTO pacientes 
 	(rut_pacientes,nombre,apellido,fechanac,direccion,telefono1,telefono2,email) 
 	VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
@@ -178,10 +172,11 @@ router.post('/registromedico', async (req, res) => {
 });
 
 router.get('/medico', async (req, res) => {
-	console.log(req.session.loggedin);
+	//console.log(req.session.loggedin);
+	//console.log(objusuario.rows[0]);
 	if (req.session.loggedin) {
 		if (objusuario.rows[0].rol === '1' || objusuario.rows[0].rol === '2') {
-			res.render('medico', { datareceta: NONAME, btnanadir: 0, Medico: 1 })
+			res.render('medico', { datareceta: NONAME, btnanadir: 0, Medico: 1})
 		} else { res.redirect('/') }
 	}
 	else {
@@ -198,7 +193,10 @@ router.post('/buscarpaciente/', async (req, res) => {
 		//console.log(datareceta);
 		//console.log(datareceta[0].rut_pacientes);
 		//console.log(datareceta[0].nombre);
-		res.render('medico', { datareceta, btnanadir: 1, Medico: 1 })
+		let buscarmedicamentos = await pool.query('SELECT id_nombre_medicamento,id_contenido FROM lista_medicamento');
+		let medicamentos = buscarmedicamentos.rows;
+		//console.log(medicamentos);
+		res.render('medico', { datareceta, btnanadir: 1, Medico: 1, medicamentos  })
 	}
 });
 
@@ -227,11 +225,19 @@ router.post('/buscarreceta/', async (req, res) => {
 });
 
 router.post('/anadirreceta/', async (req, res) => {
-	let rut = req.params.rut;
-	//console.log(rut);
-	//console.log(objusuario.rows);
-	//console.log(objusuario.rows[0].rut_users);
-	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rut, objusuario.rows[0].rut_users, 'MEDICO', 'CARDIOLOGO', 'now', 'true']);
+	let rutpaciente = req.body.rutpaciente;
+	let rutmedico = req.body.rutmedico;
+	let nommedico = req.body.nombremedico;
+	let especialidad = req.body.especialidadmedico;
+	let medicamento0 = req.body.medicamento;
+	let prescripcion=req.body.prescripcion;
+	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rutpaciente, rutmedico, nommedico, especialidad, 'now', 'true']);
+	let idreceta = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1',[rutpaciente]);
+	//console.log(idreceta.rows[0].count);
+	let medicamento = await pool.query('SELECT id_medicamento FROM lista_medicamento where id_nombre_medicamento=$1',[medicamento0]);
+	//console.log(medicamento.rows[0].id_medicamento);
+	let result2= await pool.query('INSERT INTO receta_detalle (recetas_id_detalle,medicamento,prescripcion) VALUES ($1,$2,$3)',[idreceta.rows[0].count,medicamento.rows[0].id_medicamento,prescripcion]);
+	res.render('medico',{message:"Receta Añadida Exitosamente"});
 });
 
 router.post('/modificar/', async (req, res) => {
@@ -242,6 +248,13 @@ router.post('/modificar/', async (req, res) => {
 router.post('/eliminar/', async (req, res) => {
 	let id = req.body.id;
 	console.log(id);
+});
+
+router.post('/anadirmedicamento/',async (req,res) =>{
+	let nombre = req.body.name;
+	let contenido = req.body.content;
+	let result= await pool.query('INSERT INTO lista_medicamento (id_nombre_medicamento,id_contenido) 	VALUES ($1,$2)',[nombre,contenido])
+	res.render('medico',{message:"Medicamento Añadido Exitosamente"})
 });
 
 export default router;

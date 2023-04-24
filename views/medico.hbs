@@ -13,6 +13,17 @@
                         Paciente</button>
                 </ul>
             </form>
+            {{message}}
+            <form action="/anadirmedicamento" method="post">
+                <input type="text" name="name" placeholder="Nombre Medicamento"
+                    required>
+                <input type="text" name="content" placeholder="Contenido"
+                    required>
+                <ul>
+                    <button class="btn btn-primary" type="submit">Añadir
+                        Medicamento</button>
+                </ul>
+            </form>
         </div>
 
         {{#if datareceta}}
@@ -28,10 +39,22 @@
                 <a class="buscar"><button class="btn btn-primary" type="submit">Buscar
                         Receta</button></a>
             </form>
-            <form action="/anadirreceta/{{datareceta.rut_pacientes}}"
+            <form action="/anadirreceta/"
                 method="post">
-                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir
-                        Receta</button></a>
+                <input type="text" name="rutpaciente" placeholder="Rut Paciente"
+                    required>
+                <input type="text" name="rutmedico" placeholder="Rut Medico"
+                    required>
+                <input type="text" name="nombremedico" placeholder="Nombre Médico" required>
+                <input type="text" name="especialidadmedico"
+                    placeholder="Especialidad Medico" required>
+                <select name="medicamento" id="" required>
+                {{#each medicamentos}}
+                    <option value="{{id_nombre_medicamento}}">"{{id_nombre_medicamento}}","{{id_contenido}}"</option>
+                {{/each}}
+                </select>
+                <input type="text" name="prescripcion" placeholder="prescripcion" required>
+                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir Receta</button></a>
             </form>
             {{/if}}
             {{else}}
