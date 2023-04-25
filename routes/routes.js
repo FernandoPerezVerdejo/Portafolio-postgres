@@ -175,7 +175,7 @@ router.get('/medico', async (req, res) => {
 	//console.log(objusuario.rows[0]);
 	if (req.session.loggedin) {
 		if (objusuario.rows[0].rol === '1' || objusuario.rows[0].rol === '2') {
-			res.render('medico', { datareceta: NONAME, btnanadir: 0, Medico: 1})
+			res.render('medico', { datareceta: NONAME, btnanadir: 0, Medico: 1 })
 		} else { res.redirect('/') }
 	}
 	else {
@@ -195,7 +195,7 @@ router.post('/buscarpaciente/', async (req, res) => {
 		let buscarmedicamentos = await pool.query('SELECT id_nombre_medicamento,id_contenido FROM lista_medicamento');
 		let medicamentos = buscarmedicamentos.rows;
 		//console.log(medicamentos);
-		res.render('medico', { datareceta, btnanadir: 1, Medico: 1, medicamentos  })
+		res.render('medico', { datareceta, btnanadir: 1, Medico: 1, medicamentos })
 	}
 });
 
@@ -205,35 +205,39 @@ router.post('/buscarreceta/', async (req, res) => {
 	//console.log(rut); //ya se muestra bien el rut
 	let result = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rut]);
 	if (result.rows[0].count == 0) {
-		res.render('medico',{receta:"no hay receta(s) disponibles"})
-		//console.log('no hay recetas');
+		res.render('medico', { receta: "no hay receta(s) disponibles" })
 	} else {
-		//console.log(result.rows[0].count);
-		//console.log('se encontro receta(s)');
 		//mostrar recetas
-		let resultadoreceta = await pool.query('SELECT * FROM recetas where rut_paciente_recetas=$1', [rut]);
-		//console.log(resultadoreceta);
+		//let resultadoreceta = await pool.query('SELECT * FROM recetas where rut_paciente_recetas=$1', [rut]);
+
+		//let resultadoreceta1 = resultadoreceta.rows;
+		// receta detalle
+		//let res1=[];
+		// await Promise.all(resultadoreceta1.map(async(e)=>{
+		// 	const res =await pool.query('SELECT * FROM receta_detalle where recetas_id_detalle=$1',[e.recetas_id]);
+		// 	res1.push(res.rows)
+		// }));
+		// res1.forEach(element => {
+		// 	console.log(element);
+		// });
+		// let resultadorecetadetalle = res1.rows;
+		let resultadoreceta = await pool.query(`
+		SELECT 
+		* 
+		FROM recetas a 
+			INNER JOIN receta_detalle b ON a.recetas_id = b.recetas_id_detalle 
+		WHERE a.rut_paciente_recetas=$1`,[rut]);
+
+		//foreach para cambiar estado true o false a vigente o no vigente
 		resultadoreceta.rows.forEach(element => {
 			if (element.vigente == true) {
 				element.vigente = "Vigente";
 			} else element.vigente = "No Vigente"
 		});
-		let resultadoreceta1 = resultadoreceta.rows;
-		//console.log(resultadoreceta1[0].recetas_id);
-		// receta detalle
-		
-		let resultadorecetadetall= await pool.query('SELECT * FROM receta_detalle where recetas_id_detalle=$1',[resultadoreceta1[0].recetas_id]);
-		//console.log(resultadorecetadetall);
-		let resultadorecetadetalle = resultadorecetadetall.rows;
-		//console.log(resultadorecetadetalle[0].medicamento);
-		// resultadoreceta1.forEach(element => {
-		// 	console.log(element);
-		// });
-		// resultadorecetadetalle.forEach(element => {
-		// 	console.log(element);
-		// });
-		console.log(resultadoreceta1);
-		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1,resultadorecetadetalle })
+
+		let resultadoreceta1=resultadoreceta.rows;
+
+		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1})
 	}
 });
 
@@ -243,14 +247,14 @@ router.post('/anadirreceta/', async (req, res) => {
 	let nommedico = req.body.nombremedico;
 	let especialidad = req.body.especialidadmedico;
 	let medicamento0 = req.body.medicamento;
-	let prescripcion=req.body.prescripcion;
+	let prescripcion = req.body.prescripcion;
 	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rutpaciente, rutmedico, nommedico, especialidad, 'now', 'true']);
-	let idreceta = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1',[rutpaciente]);
+	let idreceta = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rutpaciente]);
 	//console.log(idreceta.rows[0].count); buscar el id_receta
-	let medicamento = await pool.query('SELECT id_medicamento FROM lista_medicamento where id_nombre_medicamento=$1',[medicamento0]);
+	let medicamento = await pool.query('SELECT id_medicamento FROM lista_medicamento where id_nombre_medicamento=$1', [medicamento0]);
 	//console.log(medicamento.rows[0].id_medicamento); buscar el id del medicamento
-	let result2= await pool.query('INSERT INTO receta_detalle (recetas_id_detalle,medicamento,prescripcion) VALUES ($1,$2,$3)',[idreceta.rows[0].count,medicamento.rows[0].id_medicamento,prescripcion]);
-	res.render('medico',{message:"Receta Añadida Exitosamente"});
+	let result2 = await pool.query('INSERT INTO receta_detalle (recetas_id_detalle,medicamento,id_medicamento_detalle,prescripcion) VALUES ($1,$2,$3,$4)', [idreceta.rows[0].count,medicamento0, medicamento.rows[0].id_medicamento, prescripcion]);
+	res.render('medico', { message: "Receta Añadida Exitosamente" });
 });
 
 router.post('/modificar/', async (req, res) => {
@@ -263,11 +267,11 @@ router.post('/eliminar/', async (req, res) => {
 	console.log(id);
 });
 
-router.post('/anadirmedicamento/',async (req,res) =>{
+router.post('/anadirmedicamento/', async (req, res) => {
 	let nombre = req.body.name;
 	let contenido = req.body.content;
-	let result= await pool.query('INSERT INTO lista_medicamento (id_nombre_medicamento,id_contenido) 	VALUES ($1,$2)',[nombre,contenido])
-	res.render('medico',{message:"Medicamento Añadido Exitosamente"})
+	let result = await pool.query('INSERT INTO lista_medicamento (id_nombre_medicamento,id_contenido) 	VALUES ($1,$2)', [nombre, contenido])
+	res.render('medico', { message: "Medicamento Añadido Exitosamente" })
 });
 
 export default router;

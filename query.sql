@@ -43,7 +43,8 @@ ALTER TABLE recetas ADD CONSTRAINT fk_paciente_recetas_rut FOREIGN KEY (rut_paci
 CREATE TABLE receta_detalle (
     receta_detalle_id SERIAL PRIMARY KEY NOT NULL,
     recetas_id_detalle INTEGER NOT NULL,
-    medicamento INTEGER NOT NULL,
+    medicamento VARCHAR NOT NULL,
+    id_medicamento_detalle INTEGER NOT NULL,
     prescripcion VARCHAR NOT NULL
 );
 
@@ -55,7 +56,7 @@ CREATE TABLE lista_medicamento(
 );
 
 ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_recetadetalle FOREIGN KEY (recetas_id_detalle) REFERENCES recetas(recetas_id);
-ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_listamedicamento FOREIGN KEY (medicamento) REFERENCES lista_medicamento(id_medicamento);
+ALTER TABLE receta_detalle ADD CONSTRAINT fk_receta_listamedicamento FOREIGN KEY (id_medicamento_detalle) REFERENCES lista_medicamento(id_medicamento);
 
 INSERT INTO pacientes (rut_pacientes,nombre,apellido,fechanac,direccion,telefono1,telefono2,email) 
 VALUES ('19614018-2','Fernando','Perez','24-10-1997','Casa1','962652710','0','fernandoperezverdejo@gmail.com');

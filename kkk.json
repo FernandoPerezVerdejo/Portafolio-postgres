@@ -1,0 +1,14 @@
+[
+    {
+        "id_receta": 2,
+        "rut_paciente": "kk",
+        "fecha": "hoy",
+        "medicamento":[]
+    },
+    {
+        "id_receta": 2,
+        "rut_paciente": "kk",
+        "fecha": "hoy",
+        "medicamento":[]
+    }
+]
