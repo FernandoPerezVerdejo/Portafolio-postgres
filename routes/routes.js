@@ -258,7 +258,15 @@ router.post('/anadirreceta/', async (req, res) => {
 });
 
 router.post('/modificar/', async (req, res) => {
-	let id = req.body.id;
+	let id = req.body.id; // id de la receta
+	let rutpaciente = req.body.rutpaciente;
+	let rutmedico = req.body.rutmedico;
+	let nommedico = req.body.nombremedico;
+	let especialidad = req.body.especialidadmedico;
+	let prescripcion = req.body.prescripcion;
+
+	let result=await pool.query('UPDATE recetas_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3',[medicamento0,medicamento.rows[0].id_medicamento, prescripcion]);
+	res.render('medico',{message:"Receta Modificada con exito"})
 	console.log(id);
 });
 
