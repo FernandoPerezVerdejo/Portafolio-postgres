@@ -205,7 +205,7 @@ router.post('/buscarreceta/', async (req, res) => {
 	//console.log(rut); //ya se muestra bien el rut
 	let result = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rut]);
 	if (result.rows[0].count == 0) {
-		//res.render('medico',{receta:"no hay receta(s) disponibles"})
+		res.render('medico',{receta:"no hay receta(s) disponibles"})
 		//console.log('no hay recetas');
 	} else {
 		//console.log(result.rows[0].count);
@@ -219,7 +219,21 @@ router.post('/buscarreceta/', async (req, res) => {
 			} else element.vigente = "No Vigente"
 		});
 		let resultadoreceta1 = resultadoreceta.rows;
-		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1 })
+		//console.log(resultadoreceta1[0].recetas_id);
+		// receta detalle
+		
+		let resultadorecetadetall= await pool.query('SELECT * FROM receta_detalle where recetas_id_detalle=$1',[resultadoreceta1[0].recetas_id]);
+		//console.log(resultadorecetadetall);
+		let resultadorecetadetalle = resultadorecetadetall.rows;
+		//console.log(resultadorecetadetalle[0].medicamento);
+		// resultadoreceta1.forEach(element => {
+		// 	console.log(element);
+		// });
+		// resultadorecetadetalle.forEach(element => {
+		// 	console.log(element);
+		// });
+		console.log(resultadoreceta1);
+		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1,resultadorecetadetalle })
 	}
 });
 

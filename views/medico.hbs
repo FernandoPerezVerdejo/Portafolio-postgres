@@ -76,6 +76,10 @@
                 <ul>Especialidad: {{this.especialidad_medico}}</ul>
                 <ul>Fecha Emisión: {{this.fechaemision}}</ul>
                 <ul>Estado: {{this.vigente}}</ul>
+            {{#each ../resultadorecetadetalle}}
+            <input type="text" name="medicamento" value="{{this.medicamento}}" required>
+            <input type="text" name="prescripcion" value="{{this.prescripcion}}" required>
+            {{/each}}
                 <a class="modificar"><button class="btn btn-primary"
                         type="submit">Modificar</button></a>
             </form>
