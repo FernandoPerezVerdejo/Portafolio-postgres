@@ -265,7 +265,7 @@ router.post('/modificar/', async (req, res) => {
 	let especialidad = req.body.especialidadmedico;
 	let prescripcion = req.body.prescripcion;
 
-	let result=await pool.query('UPDATE recetas_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3',[medicamento0,medicamento.rows[0].id_medicamento, prescripcion]);
+	let result=await pool.query(`UPDATE recetas_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3 WHERE recetas_id_detalle=${{id}}`,[medicamento0,medicamento.rows[0].id_medicamento, prescripcion]);
 	res.render('medico',{message:"Receta Modificada con exito"})
 	console.log(id);
 });
