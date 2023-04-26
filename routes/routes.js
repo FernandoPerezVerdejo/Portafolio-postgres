@@ -226,7 +226,7 @@ router.post('/buscarreceta/', async (req, res) => {
 		* 
 		FROM recetas a 
 			INNER JOIN receta_detalle b ON a.recetas_id = b.recetas_id_detalle 
-		WHERE a.rut_paciente_recetas=$1`,[rut]);
+		WHERE a.rut_paciente_recetas=$1 ORDER BY fechaemision ASC`,[rut]);
 
 		//foreach para cambiar estado true o false a vigente o no vigente
 		resultadoreceta.rows.forEach(element => {
@@ -264,10 +264,12 @@ router.post('/modificar/', async (req, res) => {
 	let nommedico = req.body.nombremedico;
 	let especialidad = req.body.especialidadmedico;
 	let prescripcion = req.body.prescripcion;
+	let medicamento0= req.body.medicamento;
+	let medicamento = req.body.medicamento;
 
-	let result=await pool.query(`UPDATE recetas_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3 WHERE recetas_id_detalle=${{id}}`,[medicamento0,medicamento.rows[0].id_medicamento, prescripcion]);
+	let resultmedicamento = await pool.query('SELECT * FROM lista_medicamento where $1=id_nombre_medicamento',[medicamento]);
+	let result=await pool.query(`UPDATE receta_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3 WHERE recetas_id_detalle=${id}`,[medicamento0,resultmedicamento.rows[0].id_medicamento, prescripcion]);
 	res.render('medico',{message:"Receta Modificada con exito"})
-	console.log(id);
 });
 
 router.post('/eliminar/', async (req, res) => {
