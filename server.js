@@ -2,7 +2,6 @@ import express from "express";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import indexRoutes from "./routes/routes.js";
-import * as helpers from "./utils/helpers/hbs.js";
 import hbs from "hbs";
 import bodyParser from 'body-parser';
 import session from "express-session";

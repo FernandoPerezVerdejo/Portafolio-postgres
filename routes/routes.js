@@ -122,7 +122,6 @@ router.post('/register?', async (req, res) => {
 		await pool.query(`INSERT INTO users (rut_users,username,password,creado,rol) 
 		VALUES ($1,$2,$3,$4,$5)`,
 			[`${rut}`, `${user}`, `${pass}`, `now`, `0`]);
-		// ejemplo insert pool.query(`INSERT INTO users VALUES (0,'19614018-2','${user}','${pass}','now','false')`)
 		res.render('login');
 	}
 });
@@ -263,24 +262,25 @@ router.post('/anadirreceta/', async (req, res) => {
 
 router.post('/modificar/', async (req, res) => {
 	let id = req.body.id; // id de la receta
-	let rutpaciente = req.body.rutpaciente;
-	let rutmedico = req.body.rutmedico;
-	let nommedico = req.body.nombremedico;
-	let especialidad = req.body.especialidadmedico;
 	let prescripcion = req.body.prescripcion;
 	let medicamento = req.body.medicamento;
 
 	//rescata el id mediante el nombre
 	let resultmedicamento = await pool.query('SELECT * FROM lista_medicamento where $1=id_nombre_medicamento',[medicamento]);
-	console.log(resultmedicamento);
 	let result=await pool.query(`UPDATE receta_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3 WHERE recetas_id_detalle=${id}`,[medicamento,resultmedicamento.rows[0].id_medicamento, prescripcion]);
-	console.log(result);
 	res.render('medico',{message:"Receta Modificada con exito"})
 });
 
 router.post('/eliminar/', async (req, res) => {
-	let id = req.body.id;
-	console.log(id);
+	let id = req.body.id; //id de receta
+	//console.log(id);
+	// eliminar receta_detalle
+	let result = await pool.query('DELETE FROM receta_detalle WHERE recetas_id_detalle=$1',[id]);
+	// eliminar recetas
+	let result1= await pool.query('DELETE FROM recetas WHERE recetas_id=$1',[id]);
+
+	res.render('medico',{message:"Receta Eliminada con exito"})
+
 });
 
 router.post('/anadirmedicamento/', async (req, res) => {
