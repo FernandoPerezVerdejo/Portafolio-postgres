@@ -1,6 +1,5 @@
 import { Router } from "express";
 import pool from "../server.js";
-import { NONAME, NOTFOUND, TIMEOUT } from "dns";
 const router = Router();
 let objusuario = "";
 let datareceta = "";
@@ -157,7 +156,7 @@ router.post('/registromedico', async (req, res) => {
 	if (result.rowCount > 0) {
 		res.render('home', { flag: 0, Iniciar: 1, Registro: 1 })
 	} else {
-		//console.log('no encuentra usuario, INSERTAR');
+		//console.log('no encuentra usuario');
 		await pool.query(`INSERT INTO pacientes 
 	(rut_pacientes,nombre,apellido,fechanac,direccion,telefono1,telefono2,email) 
 	VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
@@ -175,7 +174,7 @@ router.get('/medico', async (req, res) => {
 	//console.log(objusuario.rows[0]);
 	if (req.session.loggedin) {
 		if (objusuario.rows[0].rol === '1' || objusuario.rows[0].rol === '2') {
-			res.render('medico', { datareceta: NONAME, btnanadir: 0, Medico: 1 })
+			res.render('medico', { datareceta, btnanadir: 0, Medico: 1 })
 		} else { res.redirect('/') }
 	}
 	else {
@@ -221,11 +220,15 @@ router.post('/buscarreceta/', async (req, res) => {
 		// 	console.log(element);
 		// });
 		// let resultadorecetadetalle = res1.rows;
+		let medicinas0 = await pool.query('SELECT * FROM lista_medicamento');
+		let medicinas = medicinas0.rows;
+
 		let resultadoreceta = await pool.query(`
 		SELECT 
 		* 
 		FROM recetas a 
 			INNER JOIN receta_detalle b ON a.recetas_id = b.recetas_id_detalle 
+			INNER JOIN lista_medicamento c ON c.id_medicamento = b.id_medicamento_detalle
 		WHERE a.rut_paciente_recetas=$1 ORDER BY fechaemision ASC`,[rut]);
 
 		//foreach para cambiar estado true o false a vigente o no vigente
@@ -235,9 +238,10 @@ router.post('/buscarreceta/', async (req, res) => {
 			} else element.vigente = "No Vigente"
 		});
 
-		let resultadoreceta1=resultadoreceta.rows;
+		let resultadoreceta1= resultadoreceta.rows;
+		console.log(resultadoreceta1);
 
-		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1})
+		res.render('medico', { receta: "Esta(s) son las recetas disponibles", resultadoreceta1,medicinas})
 	}
 });
 
@@ -264,11 +268,13 @@ router.post('/modificar/', async (req, res) => {
 	let nommedico = req.body.nombremedico;
 	let especialidad = req.body.especialidadmedico;
 	let prescripcion = req.body.prescripcion;
-	let medicamento0= req.body.medicamento;
 	let medicamento = req.body.medicamento;
 
+	//rescata el id mediante el nombre
 	let resultmedicamento = await pool.query('SELECT * FROM lista_medicamento where $1=id_nombre_medicamento',[medicamento]);
-	let result=await pool.query(`UPDATE receta_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3 WHERE recetas_id_detalle=${id}`,[medicamento0,resultmedicamento.rows[0].id_medicamento, prescripcion]);
+	console.log(resultmedicamento);
+	let result=await pool.query(`UPDATE receta_detalle SET medicamento=$1,id_medicamento_detalle=$2,prescripcion=$3 WHERE recetas_id_detalle=${id}`,[medicamento,resultmedicamento.rows[0].id_medicamento, prescripcion]);
+	console.log(result);
 	res.render('medico',{message:"Receta Modificada con exito"})
 });
 

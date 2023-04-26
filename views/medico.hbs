@@ -49,12 +49,15 @@
                 <input type="text" name="especialidadmedico"
                     placeholder="Especialidad Medico" required>
                 <select name="medicamento" id="" required>
-                {{#each medicamentos}}
+                    <option value=""></option>
+                    {{#each medicamentos}}
                     <option value="{{id_nombre_medicamento}}">"{{id_nombre_medicamento}}","{{id_contenido}}"</option>
-                {{/each}}
+                    {{/each}}
                 </select>
-                <input type="text" name="prescripcion" placeholder="prescripcion" required>
-                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir Receta</button></a>
+                <input type="text" name="prescripcion"
+                    placeholder="prescripcion" required>
+                <a class="añadir"><button class="btn btn-primary" type="submit">Añadir
+                        Receta</button></a>
             </form>
             {{/if}}
             {{else}}
@@ -76,9 +79,16 @@
                 <ul>Especialidad: {{this.especialidad_medico}}</ul>
                 <ul>Fecha Emisión: {{this.fechaemision}}</ul>
                 <ul>Estado: {{this.vigente}}</ul>
-            
-            <input type="text" name="medicamento" value="{{this.medicamento}}" required>
-            <input type="text" name="prescripcion" value="{{this.prescripcion}}" required>
+                {{!-- -------------------------------- --}}
+                <select name="medicamento" required>
+                    {{#each ../medicinas}}
+                    <option value="{{id_nombre_medicamento}}">"{{id_nombre_medicamento}}","{{id_contenido}}"</option>
+                    {{/each}}
+                    {{@index}}:<option value="{{this.medicamento}}" selected>"{{this.medicamento}}","{{this.id_contenido}}"</option>
+                </select>
+                {{!-- ----------------------------------- --}}
+                <input type="text" name="prescripcion"
+                    value="{{this.prescripcion}}" required>
                 <a class="modificar"><button class="btn btn-primary"
                         type="submit">Modificar</button></a>
             </form>
