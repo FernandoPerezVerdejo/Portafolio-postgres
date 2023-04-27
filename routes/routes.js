@@ -252,11 +252,13 @@ router.post('/anadirreceta/', async (req, res) => {
 	let medicamento0 = req.body.medicamento;
 	let prescripcion = req.body.prescripcion;
 	let result = await pool.query(`INSERT INTO recetas (rut_paciente_recetas,rut_medico,nombre_medico,especialidad_medico,fechaemision,vigente) VALUES ($1,$2,$3,$4,$5,$6)`, [rutpaciente, rutmedico, nommedico, especialidad, 'now', 'true']);
-	let idreceta = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rutpaciente]);
+	//let idreceta = await pool.query('SELECT count(*) FROM recetas where rut_paciente_recetas=$1', [rutpaciente]);
+	let idreceta = await pool.query('SELECT max(recetas_id) FROM recetas where rut_paciente_recetas=$1', [rutpaciente]);
+	//console.log(idreceta.rows[0].max);
 	//console.log(idreceta.rows[0].count); buscar el id_receta
 	let medicamento = await pool.query('SELECT id_medicamento FROM lista_medicamento where id_nombre_medicamento=$1', [medicamento0]);
 	//console.log(medicamento.rows[0].id_medicamento); buscar el id del medicamento
-	let result2 = await pool.query('INSERT INTO receta_detalle (recetas_id_detalle,medicamento,id_medicamento_detalle,prescripcion) VALUES ($1,$2,$3,$4)', [idreceta.rows[0].count,medicamento0, medicamento.rows[0].id_medicamento, prescripcion]);
+	let result2 = await pool.query('INSERT INTO receta_detalle (recetas_id_detalle,medicamento,id_medicamento_detalle,prescripcion) VALUES ($1,$2,$3,$4)', [idreceta.rows[0].max,medicamento0, medicamento.rows[0].id_medicamento, prescripcion]);
 	res.render('medico', { message: "Receta Añadida Exitosamente" });
 });
 
